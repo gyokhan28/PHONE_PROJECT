@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.OleDb;
+using System.Data.SqlClient;
+using System.Configuration;
+
+namespace PhoneProject2020
+{
+
+    public partial class NewPhone : Form
+    {
+        OleDbConnection con = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\gyokh\Desktop\project_USP.accdb");
+        public NewPhone()
+        {
+            InitializeComponent();
+        }
+
+        private void NewPhone_Load(object sender, EventArgs e)
+        {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            Image myimage = new Bitmap(@"C:\Users\gyokh\Documents\Visual Studio 2013\Projects\PhoneProject2020\NewPhone.jpg");
+            this.BackgroundImage = myimage;
+        }
+
+        private void ButtonAdd_Click(object sender, EventArgs e)
+        {
+            if (NewMarka.Text == ""||NewMarka.Text==""||NewNetwork.Text==""||NewLaunch.Text==""||NewRez.Text==""||NewOS.Text==""||NewCPU.Text==""||NewMem.Text==""||NewCamera.Text==""||NewSelfie.Text==""||NewWLAN.Text==""||NewBlue.Text==""||NewGPS.Text==""||NewNFC.Text==""||NewUSB.Text==""||NewBattery.Text==""||NewCena.Text=="")
+            {
+                MessageBox.Show("Не са въведени нужните данни!", "Некоретно въведени данни", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                con.Open();
+                OleDbCommand cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                OleDbCommand cmmd = con.CreateCommand();
+                cmmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"insert into Brands(Brand, Model) values ('" + NewMarka.Text + "','" + NewModel.Text + "')";
+                cmmd.CommandText = @"insert into Specs(Network, Launch, Display_resolution, OS, CPU, Internal_memory, Camera, Selfie_camera, WLAN, Bluetooth, GPS, NFC, USB, Battery, Price)  values ('" + NewNetwork.Text + "','" + NewLaunch.Text + "','" + NewRez.Text + "','" + NewOS.Text + "','" + NewCPU.Text + "','" + NewMem.Text + "','" + NewCamera.Text + "','" + NewSelfie.Text + "','" + NewWLAN.Text + "','" + NewBlue.Text + "','" + NewGPS.Text + "','" + NewNFC.Text + "','" + NewUSB.Text + "','" + NewBattery.Text + "','" + NewCena.Text + "')";
+                cmd.ExecuteNonQuery();
+                cmmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show("Успешно добавен " + NewMarka.Text + " " + NewModel.Text + "!", "Успешно добавяне", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                NewMarka.Clear(); NewModel.Clear(); NewNetwork.Clear(); NewLaunch.Clear(); NewRez.Clear(); NewOS.Clear(); NewCPU.Clear(); NewMem.Clear(); NewCamera.Clear(); NewSelfie.Clear(); NewWLAN.Clear(); NewBlue.Clear(); NewGPS.Clear(); NewNFC.Clear(); NewUSB.Clear(); NewBattery.Clear(); NewCena.Clear();
+            }
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void NewLaunch_TextChanged(object sender, EventArgs e)
+        {
+            NewLaunch.MaxLength = 8;
+
+        }
+
+        private void NewLaunch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+                (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void NewCena_TextChanged(object sender, EventArgs e)
+        {
+            NewCena.MaxLength = 4;
+        }
+
+        private void NewCena_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+    }
+}
